@@ -70,7 +70,7 @@ public abstract class EntryAction<K, V, R> extends Entry.PiggyBack implements
    * Reference to the entry we do processing for or the dummy entry {@link #NON_FRESH_DUMMY}
    * The field is volatile, to be safe when we get a callback from a different thread.
    */
-  volatile Entry<K, V> heapEntry;
+  Entry<K, V> heapEntry;
   ExaminationEntry<K, V> heapOrLoadedEntry;
   V newValueOrException;
   V oldValueOrException;
