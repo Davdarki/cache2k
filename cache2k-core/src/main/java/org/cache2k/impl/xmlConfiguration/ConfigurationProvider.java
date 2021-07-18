@@ -44,7 +44,7 @@ import java.util.Map;
  */
 public class ConfigurationProvider {
   private PropertyParser propertyParser = new StandardPropertyParser();
-  private volatile Map<Class<?>, BeanPropertyMutator> type2mutator = new HashMap<Class<?>, BeanPropertyMutator>();
+  private Map<Class<?>, BeanPropertyMutator> type2mutator = new HashMap<Class<?>, BeanPropertyMutator>();
 
   private static String constructGetterName(final String containerName) {
     return "get" + Character.toUpperCase(containerName.charAt(0)) + containerName.substring(1);
