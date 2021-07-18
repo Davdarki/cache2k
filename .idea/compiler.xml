@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cache2k-schemas" />
+        <module name="cache2k-jcache-tests" />
+        <module name="test-osgi" />
+        <module name="cache2k-all" />
+        <module name="test-init" />
+        <module name="cache2k-osgi-all" />
+        <module name="cache2k-core" />
+        <module name="cache2k-testing" />
+        <module name="cache2k-api" />
+        <module name="cache2k-jcache" />
+        <module name="cache2k-spring" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cache2k-all" target="1.6" />
+      <module name="cache2k-api" target="1.6" />
+      <module name="cache2k-base-bom" target="1.5" />
+      <module name="cache2k-core" target="1.6" />
+      <module name="cache2k-jcache" target="1.6" />
+      <module name="cache2k-jcache-tests" target="1.7" />
+      <module name="cache2k-osgi-all" target="1.6" />
+      <module name="cache2k-parent" target="1.5" />
+      <module name="cache2k-schemas" target="1.6" />
+      <module name="cache2k-spring" target="1.8" />
+      <module name="cache2k-testing" target="1.6" />
+      <module name="documentation" target="1.5" />
+      <module name="test-init" target="1.6" />
+      <module name="test-osgi" target="1.6" />
+      <module name="test-parent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cache2k-all" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-api" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-core" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-jcache" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-jcache-tests" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-osgi-all" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-schemas" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-spring" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="cache2k-testing" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="test-init" options="-Xlint:deprecation -Xlint:unchecked" />
+      <module name="test-osgi" options="-Xlint:deprecation -Xlint:unchecked" />
+    </option>
+  </component>
+</project>

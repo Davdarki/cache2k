@@ -1,0 +1,106 @@
+[[atomic-operations]]
+== Atomic Operations
+
+Atomic operations allow a combination of read or compare and modify a cached entry
+without interference of another thread.
+
+=== Example
+
+The method `Cache.replaceIfEquals()` has the following semantics:
+
+[source,java]
+----
+    if (cache.containsKey(key) && Objects.equals(cache.get(key), oldValue)) {
+      cache.put(key, newValue);
+      return true;
+    } else
+      return false;
+    }
+----
+
+When executing the above statements sequentially, the outcome can vary because other threads can interfere.
+The atomic operation semantic guarantees that this is not possible.
+
+These kind of operations are also called CAS (compare and swap) operations.
+
+=== Built-in Atomic Operations
+
+In general all operations on a single entry have atomic guarantee. Bulk operations, meaning operations on
+multiple keys, like `getAll()`, don't have atomic guarantees.
+
+[width="70",options="header"]
+|===
+|Operation|Description
+|`boolean containsAndRemove(key)`| Remove and return true if something was present
+|`V peekAndRemove(key)`| Remove and return existing value
+|`boolean putIfAbsent(key, value)`| Insert value only if no value is present
+|`V peekAndReplace(key, value)`| Replace value and return old value
+|`boolean Cache.replace(key, value)`| Replace value and return true when successful
+|`V peekAndPut(key, value)`| Insert or update value and return the previous value
+|`boolean replaceIfEquals(key, expectedValue, newValue)`| Replace value only when old value is present in the cache
+|`boolean removeIfEquals(key, expectedValue)`| Remove only if present value matches
+|===
+
+=== Entry Processor
+
+With the entry processor it is possible to implement arbitrary complex operations that are processed atomically
+on a cache entry. The interface `EntryProcessor` must be implemented with the desired semantics and invoked on a cached value
+via `Cache.invoke()`. The bulk operation `Cache.invokeAll()` is available to process multiple cache entries
+with one entry processor.
+
+Here is an example which implements the same semantics as `replaceIfEquals()`:
+
+[source,java]
+----
+      final K key = ...
+      final V oldValue = ...
+      final V newValue = ...
+      EntryProcessor<K, V, Boolean> p = new EntryProcessor<K, V, Boolean>() {
+        public Boolean process(MutableCacheEntry<K, V> entry) {
+          if (!entry.exists()) {
+            return false;
+          }
+          if (oldValue == null) {
+            if (null != entry.getValue()) {
+              return false;
+            }
+          } else {
+            if (!oldValue.equals(entry.getValue())) {
+              return false;
+            }
+          }
+          entry.setValue(newValue);
+          return true;
+        }
+      };
+      return cache.invoke(key, p);
+    }
+----
+
+Since it is an atomic operation multiple calls on
+link:{cache2k_docs}/apidocs/cache2k-api/index.html?org/cache2k/processor/MutableCacheEntry.html[`MutableCacheEntry`] may have no effect if
+neutralising each other. For example:
+
+[source,java]
+----
+     entry.setValue("xy");
+     entry.setValue("abc");
+     entry.remove();
+----
+
+The effect will be:
+
+- If an entry for the key is existing, the entry will be removed
+- If no entry for the key is existing, the cache state will not change
+- If a cache writer is attached, `CacheWriter.delete()` will be called in any case
+
+Via the entry processor, it is also possible to specify an expiry time directly.
+Here is an example formulated as Java 8 lambda expression, which inserts a value and
+sets the expiry after 120 minutes:
+
+[source,java]
+----
+     cache.invoke("key",
+       e -> e.setValue("value")
+             .setExpiry(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(120)));
+----

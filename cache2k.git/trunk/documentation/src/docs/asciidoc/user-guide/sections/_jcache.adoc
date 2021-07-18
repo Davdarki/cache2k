@@ -1,0 +1,320 @@
+[[jcache]]
+== JCache
+
+cache2k supports the JCache API standard. The implementation is compatible to the JSR107 TCK.
+
+=== Maven Dependencies
+
+To use cache2k as JCache caching provider for local caching add the following dependency:
+
+[source,xml,subs="attributes+"]
+----
+    <dependencies>
+      <dependency>
+        <groupId>org.cache2k</groupId>
+        <artifactId>cache2k-jcache</artifactId>
+        <version>{cache2k_version}</version>
+        <type>pom</type>
+        <scope>runtime</scope>
+      </dependency>
+    </dependencies>
+----
+
+The `cache2k-jcache` artifact transitive dependencies provide everything
+for the local caching functionality at runtime.
+
+For applications that need the JCache API or cache2k API in compile scope,
+use this scheme:
+
+[source,xml,subs="attributes+"]
+----
+    <properties>
+      <cache2k-version>{cache2k_version}</cache2k-version>
+    </properties>
+
+    <!--
+          Provides the cache2k JCache implementation and depends on
+          everything needed at runtime.
+      -->
+    <dependency>
+      <groupId>org.cache2k</groupId>
+      <artifactId>cache2k-jcache</artifactId>
+      <version>${cache2k-version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+         Optional. When application code depends on JCache API.
+      -->
+    <dependency>
+      <groupId>javax.cache</groupId>
+      <artifactId>cache-api</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+    <!--
+         Optional. When application code depends on the cache2k API.
+         Needed for the programmatic configuration inside the application.
+      -->
+    <dependency>
+      <groupId>org.cache2k</groupId>
+      <artifactId>cache2k-api</artifactId>
+      <version>${cache2k-version}</version>
+    </dependency>
+----
+
+=== Getting the Caching Provider
+
+If more then one JCache provider is present in the application, the cache2k JCache provider needs to
+be requested explicitly. The classname of the provider is `org.cache2k.jcache.provider.JCacheProvider`.
+To request the cache2k provider use:
+
+[source,java]
+----
+    CachingProvider cachingProvider =
+      Caching.getCachingProvider("org.cache2k.jcache.provider.JCacheProvider");
+----
+
+=== Getting Started with the JCache API
+
+Since cache2k is JCache compatible, any available JCache introduction can be used for the
+first steps. The following online sources are recommended:
+
+ - https://dzone.com/refcardz/java-caching
+ - https://www.youtube.com/watch?v=EugtmOaZn9w
+
+=== Configuration
+
+JCache does not define a complete cache configuration, for example, configuring the
+cache capacity is not possible. To specify a meaningful cache configuration, the cache2k configuration mechanism
+needs to be utilized.
+
+==== Programmatic Configuration
+
+To create a JCache with an additional cache2k configuration the interface `ExtendedConfiguration`
+and the class `MutableExtendedConfiguration` is provided. Example usage:
+
+[source,java]
+----
+    CachingProvider p = Caching.getCachingProvider();
+    CacheManager cm = p.getCacheManager();
+    Cache<Long, Double> cache = cm.createCache("aCache", ExtendedMutableConfiguration.of(
+      new Cache2kBuilder<Long, Double>(){}
+        .entryCapacity(10000)
+        .expireAfterWrite(5, TimeUnit.MINUTES)
+    ));
+----
+
+[[jcache-uri-exception]]
+[[cache-manager-and-xml-configuration]]
+==== Cache Manager and XML Configuration
+
+To get the default cache manager, do:
+
+[source,java]
+----
+    provider.getCacheManager(null, classloader, properties);
+----
+
+or
+
+[source,java]
+----
+    provider.getCacheManager(getDefaultURI(), classloader, properties);
+----
+
+or simply, if you don't need to specify properties or a classloader:
+
+[source,java]
+----
+    provider.getCacheManager();
+----
+
+In case there is a `cache2k.xml` present in the class path, this will be picked up automatically.
+
+Different cache manager URIs will create different cache manager have a separate XML configuration.
+The manager URI is not the path to the configuration file but simply the cache manager name as used within
+the cache2k API. For example:
+
+[source,java]
+----
+    provider.getCacheManager(new URI("special"), classloader, properties);
+----
+
+In the above example `special` is used as the name of the manager and the configuration is expected to be at
+`cache2k-special.xml`. There is no need for an URI to have a scheme.
+For a rationale, see: (GH#91)[https://github.com/cache2k/cache2k/issues/91]
+
+Within the XML configuration the different sections for a cache do apply for caches
+requested via `CacheManager.createCache` or `CacheManager.getCache`, see <<xml-configuration,XML configuration>>.
+
+[[jcache-optimizations]]
+==== Optimizations and Semantic Differences
+
+WARNING: In case a JCache cache is created with a cache2k configuration present, the generated JCache cache
+has slightly different semantics then those defined in the JCache specification. cache2k has
+different default settings, which are optimized towards performance.
+This section explains the differences and how to switch back to the standard behavior,
+if this might be really needed.
+
+Expiry:: With pure JCache configuration the expiry is set to sharp expiry by default for maximum compatiblity. When the
+   cache2k configuration is used, sharp expiry is off and needs to be enabled explicitly.
+`Configuration.isStoreByValue`:: When the cache2k configuration is active the parameter will be ignored.
+   Store by value semantics can enabled again in the JCache configuration section of cache2k
+   `JCacheConfiguration.Builder.copyAlwaysIfRequested`. See example below how to specify the additional parameters.
+`Cache.registerCacheEntryListener`:: Online attachment of listeners is not supported unless listeners are already
+   present in the initial configuration, or if explicitly enabled via
+   `JCacheConfiguration.Builder.supportOnlineListenerAttachment`. If no listeners are needed, which is most
+   often the case, cache2k switches to a faster internal processing mode.
+
+To enable full JCache compliance by default via the XML configuration, use these defaults in the setup:
+
+[source,xml]
+----
+<cache2k>
+  <version>1.0</version>
+  <defaults>
+    <cache>
+      <sections>
+        <jcache>
+          <copyAlwaysIfRequested>true</copyAlwaysIfRequested>
+          <supportOnlineListenerAttachment>true</supportOnlineListenerAttachment>
+        </jcache>
+      </sections>
+      <sharpExpiry>true</sharpExpiry>
+    </cache>
+  </defaults>
+</cache2k>
+----
+
+There are more optimizations in cache2k happening transparently, e.g. when a expiry policy with a static
+setting is detected. For this reason avoid using a custom expiry policy class if not needed.
+
+==== Merging of JCache and cache2k Configuration
+
+The JCache configuration and the cache2k configuration may have settings that control the same
+feature, for example expiry. In this case the two configurations need to be merged and conflicting settings
+have to be resolved. The policy is as follows:
+
+Expiry settings:: Settings in cache2k configuration take precedence. A configured expiry policy in the standard
+  JCache `CacheConfiguration` will be ignored if either `expiryAfterWrite` or `expiryPolicy` is specified in
+  the cache2k configuration.
+Loader and Writer:: Settings in JCache configuration take precedence. If a loader or a writer is specified in the
+  JCache `CacheConfiguration` the setting in the cache2k configuration is ignored.
+Event listeners:: Registered listeners of both configurations will be used.
+
+=== Control Custom JCache Semantics
+
+The cache2k JCache implementation has additional options that control its semantics. These options are available in
+the `JCacheConfiguration` configuration section, which is provided by the `cache2k-jcache-api` module.
+
+Example usage:
+
+[source,java]
+----
+    CachingProvider p = Caching.getCachingProvider();
+    CacheManager cm = p.getCacheManager();
+    Cache<Long, Double> cache = cm.createCache("aCache", ExtendedMutableConfiguration.of(
+      new Cache2kBuilder<Long, Double>(){}
+        .entryCapacity(10000)
+        .expireAfterWrite(5, TimeUnit.MINUTES)
+        .with(new JCacheConfiguration.Builder()
+          .copyAlwaysIfRequested(true)
+        )
+    ));
+----
+
+The example enables store by value semantics again and requests that keys and values are copied when passed
+to the cache or retrieved from the cache.
+
+=== Don't Mix APIs
+
+The cache2k JCache implementation wraps a native cache2k. For a JCache cache instance it is possible to retrieve the
+underlying cache2k implementation, for example by using `Cache.unwrap`. Using the native API in combination with
+the JCache API may have unexpected results. The reason is, that a native cache is configured differently by
+the JCache implementation to support the JCache behavior (e.g. the `ExceptionPropagator` is used).
+
+An application that mixes APIs may break between cache2k version changes, in case there is an incompatible
+change in the adapter layer. There is no guarantee this will never happen.
+
+=== Implementation Details
+
+==== Semantic Changes Between JCache 1.0 and JCache 1.1
+
+The JCache specification team has made some changes to its TCK since the original 1.0 release.
+The cache2k implementation adheres to the latest corrected TCK 1.1.
+
+.Corrected or Enforced JSR107 Semantics in TCK 1.1
+[width="70",options="header"]
+,===
+Affected Component,JSR107 GitHub issue
+`EntryProcessorException`, https://github.com/jsr107/jsr107tck/issues/85
+Customizations may implement `Closeable`, https://github.com/jsr107/jsr107tck/issues/100
+`CacheEntry.getOldValue()` for removed event, https://github.com/jsr107/jsr107spec/issues/391
+Statistics of `Cache.putIfAbsent()`, https://github.com/jsr107/jsr107tck/issues/63
+`CacheManager.getCacheNames()`, https://github.com/jsr107/jsr107tck/issues/87
+`CacheManager.getCache()`, https://github.com/jsr107/jsr107spec/issues/340
+JMX statistics,  https://github.com/jsr107/jsr107tck/issues/83
+,===
+
+==== Expiry Policy
+
+If configured via cache2k mechanisms, the cache2k expiry settings take precedence.
+
+If a JCache configuration is present for the expiry policy the policies `EternalExpiryPolicy`,
+`ModifiedExpiredPolicy` and `CreatedExpiredPolicy` will be handled more efficiently than a custom
+implementation of the `ExpiryPolicy`.
+
+The use of `TouchedExpiryPolicy` or `ExpiryPolicy.getExpiryAccess()` is discouraged. Test performance
+carefully before use in production.
+
+==== Store by Value
+
+If configured via cache2k mechanisms, store by value semantics are not provided by cache2k by default.
+Instead the usual in process semantics are provided. Applications should not rely on the fact
+that values or keys are copied by the cache in general.
+
+For heap protection cache2k is able to copy keys and values. This can be enabled via the parameter
+`JCacheConfiguration.setCopyAlwaysIfRequested`, see the configuration example above.
+
+==== Loader exceptions
+
+cache2k is able to cache or suppress exceptions, depending on the situation and the configuration.
+
+If an exception is cached, the following behavior can be expected:
+
+  * Accessing the value of the entry, will trigger an exception
+  * `Cache.containsKey()` will be true for the respective key
+  * `Cache.iterator()` will skip entries that contain exceptions
+
+==== Listeners
+
+Asynchronous events are delivered in a way to achieve highest possible parallelism while retaining the event
+order on a single key. Synchronous events are delivered sequentially.
+
+==== Entry processor
+
+Calling other methods on the cache from inside an entry processor execution (reentrant operation), is not supported.
+The entry processor should have no external side effects. To enable asynchronous operations, the execution
+may be interrupted by a `RestartException` and restarted.
+
+==== Cache.getConfiguration()
+
+It is not possible to retrieve the additional effective cache2k configuration with this method.
+
+=== Performance
+
+Using the JCache API does not deliver the same performance as when the native cache2k API is used.
+Some design choices in JCache lead to additional overhead, for example:
+
+ - Event listeners are attachable and detachable at runtime
+ - Expiry policy needs to be called for every access
+ - Store-by-value semantics require keys and values to be copied
+
+=== Compliance Testing
+
+To pass the TCK tests on statistics, which partially enforce that statistic values need to be updated immediately.
+For compliance testing the following system properties need to be set:
+
+- `org.cache2k.core.HeapCache.Tunable.minimumStatisticsCreationTimeDeltaFactor=0`
+- `org.cache2k.core.HeapCache.Tunable.minimumStatisticsCreationDeltaMillis=-1`
+
+Since immediate statistics update is not a requirement by the JSR107 spec this is needed for testing purposes only.

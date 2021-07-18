@@ -1417,6 +1417,7 @@ public class HeapCache<K, V> extends BaseCache<K, V> {
   }
 
   private void reviveRefreshedEntry(final Entry<K, V> e, final long _nrt) {
+
     synchronized (e) {
       metrics.refreshedHit();
       finishLoadOrEviction(e, _nrt);

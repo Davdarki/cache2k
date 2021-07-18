@@ -1,0 +1,3 @@
+version=${version}
+buildNumber=${buildNumber}
+gitSha1=${gitSha1}

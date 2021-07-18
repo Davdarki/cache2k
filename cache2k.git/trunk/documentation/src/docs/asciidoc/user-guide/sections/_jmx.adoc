@@ -1,0 +1,19 @@
+== JMX
+
+=== Containers, ClassLoaders and CacheManager names
+
+The JMX objects are registered at the platform MBean manager. This requires that the cache manager
+name is unique within the platform, even if there is a separation by different class loaders.
+A good practise to avoid problems, is to set the cache manager name to a unique name for an application.
+The name of the default manager can be changed via JNDI, `CacheManager.setDefaultName()` or
+the XML configuration.
+
+If manager names within the platform are not unique an ambiguous situation exists that may lead to an
+exception or unusable JMX beans. Currently, naming conflicts are silently ignored.
+
+=== Name quoting
+
+Cache and manager names may contain the comma character. If a comma is contained, then it will be quoted
+in the JMX value. Quoted and unquoted values for the same key is undesirable, so a comma character should
+be avoided in a cache name.
+

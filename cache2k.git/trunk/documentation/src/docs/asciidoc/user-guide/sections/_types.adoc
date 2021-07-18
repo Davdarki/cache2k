@@ -1,0 +1,73 @@
+== Types
+
+This section covers:
+
+- How to construct a cache with concrete types
+- Why you should use types
+- How generic types are captured
+
+=== Constructing a Cache with Generic Types
+
+When using generic types, the cache is constructed the same way as already shown in the
+__Getting started__ chapter.
+
+[source,java]
+----
+    Cache<Long, List<String>> cache =
+      new Cache2kBuilder<Long, List<String>>() {}
+        .eternal(true)
+        .build();
+----
+
+The `{}` is a trick which constructs an anonymous class, which contains the complete type information.
+If just an object would be created the complete type information would not be available at runtime and could
+not be used for configuring the cache.
+
+Caches can be constructed dynamically with arbitrary generic types. The type information can be
+specified via the interface `CacheType`.
+
+=== Constructing a Cache without Generic Types
+
+If the cache types do not contain generic types, then the following simpler builder pattern
+can be used:
+
+[source,java]
+----
+    Cache<Long, String> cache =
+      Cache2kBuilder.of(Long.class, String.class)
+        .eternal(true)
+        .build();
+----
+
+The additional generated class as in the previous version is not needed, which saves a few bytes program code.
+
+=== Key Type
+
+The key type needs to implement `equals()` and `hashCode()`. Arrays are not valid for keys.
+
+=== Value Type
+
+Using arrays as values is discouraged, because some cache operations testing for value equality,
+like `Cache.replaceIfEquals()`, will not work as desired on arrays.
+To prevent problems, cache2k refuses to build a cache with an array value type specified
+at the configuration. However, this protection can be circumvented by not providing the
+proper type in the cache configuration.
+
+If the value type is implementing
+{api_link}/expiry/ValueWithExpiryTime.html[`ValueWithExpiryTime`],
+an expiry policy is added automatically.
+
+=== Untyped Caches
+
+It is possible to construct an untyped cache via `Cache2kBuilder.forUnknownTypes()`. But, the
+use of untyped caches is discouraged. If different types need to be stored in a cache, construct
+a separate cache for each type with the proper type information.
+
+=== Future Enhancements
+
+Future versions of cache2k will leverage the type information for:
+
+- optimizations depending on the type
+- optional strict type checking
+- optional copying
+- derive a optimal marshaller for off heap overflow and persistence
