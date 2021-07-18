@@ -107,21 +107,26 @@ public class CacheConfigurationProviderImpl
         "Cache name missing, cannot apply XML configuration. " +
         "Consider parameter: ignoreAnonymousCache");
     }
-    ParsedConfiguration _parsedTop = readManagerConfigurationWithExceptionHandling(mgr.getClassLoader(), getFileName(mgr));
-    ParsedConfiguration _section = extractCachesSection(_parsedTop);
-    ParsedConfiguration _parsedCache = null;
-    if (_section != null) { _parsedCache = _section.getSection(cacheName); }
-    if (_parsedCache == null) {
-      if (ctx.getManagerConfiguration().isIgnoreMissingCacheConfiguration()) {
-        return;
+    if(readManagerConfigurationWithExceptionHandling(mgr.getClassLoader(), getFileName(mgr))!=null){
+      ParsedConfiguration _parsedTop = readManagerConfigurationWithExceptionHandling(mgr.getClassLoader(), getFileName(mgr));
+      ParsedConfiguration _section = extractCachesSection(_parsedTop);
+      ParsedConfiguration _parsedCache = null;
+      if (_section != null) { _parsedCache = _section.getSection(cacheName); }
+      if (_parsedCache == null) {
+        if (ctx.getManagerConfiguration().isIgnoreMissingCacheConfiguration()) {
+          return;
+        }
+        String _exceptionText =
+                "Configuration for cache '" + cacheName + "' is missing. " +
+                        "Consider parameter: ignoreMissingCacheConfiguration" +
+                        " at " + _parsedTop.getSource();
+        throw new IllegalArgumentException(_exceptionText);
       }
-      String _exceptionText =
-        "Configuration for cache '" + cacheName + "' is missing. " +
-          "Consider parameter: ignoreMissingCacheConfiguration" +
-          " at " + _parsedTop.getSource();
-      throw new IllegalArgumentException(_exceptionText);
+      apply(ctx, _parsedCache, cfg);
     }
-    apply(ctx, _parsedCache, cfg);
+
+
+
   }
 
   @Override
@@ -237,7 +242,12 @@ public class CacheConfigurationProviderImpl
   private ParsedConfiguration readManagerConfigurationWithExceptionHandling(final ClassLoader cl, final String fileName) {
     ParsedConfiguration pc;
     try {
-      pc = readManagerConfiguration(cl, fileName);
+      if(readManagerConfiguration(cl, fileName)!= null) {
+        pc = readManagerConfiguration(cl, fileName);
+      }else{
+        throw new Exception("Error");
+      }
+
     } catch (CacheException ex) {
       throw ex;
     } catch (Exception ex) {
