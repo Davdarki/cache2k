@@ -20,6 +20,7 @@ package org.cache2k.impl.xmlConfiguration.generic;
  * #L%
  */
 
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -40,6 +41,13 @@ public class StaxConfigTokenizer extends AbstractConfigurationTokenizer {
     throws XMLStreamException {
     super(source);
     XMLInputFactory f = XMLInputFactory.newInstance();
+    // to be compliant, completely disable DOCTYPE declaration:
+    f.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+// or completely disable external entities declarations:
+    f.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+// or prohibit the use of all protocols by external entities:
+    f.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+    f.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
     input = f.createXMLStreamReader(in, encoding);
   }
 
