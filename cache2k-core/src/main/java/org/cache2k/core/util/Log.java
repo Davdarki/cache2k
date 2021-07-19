@@ -75,7 +75,7 @@ public abstract class Log {
     for (LogFactory lf : loader) {
       logFactory = lf;
       log("New instance, using: " + logFactory.getClass().getName());
-      
+
     }
     try {
       final org.slf4j.ILoggerFactory lf = org.slf4j.LoggerFactory.getILoggerFactory();
