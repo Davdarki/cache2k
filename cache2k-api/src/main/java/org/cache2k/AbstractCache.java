@@ -6,7 +6,6 @@ package org.cache2k;
  * %%
  * Copyright (C) 2000 - 2019 headissue GmbH, Munich
  * %%
-
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
@@ -217,7 +216,7 @@ public class AbstractCache<K, V> implements Cache<K, V> {
   }
 
   @Override
-  public <X> X requestInterface(final Class<X> _type) {
+  public <X> X requestInterface(final Class<X> type) {
     throw new UnsupportedOperationException();
   }
 

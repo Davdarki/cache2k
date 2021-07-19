@@ -1,4 +1,4 @@
-package org.cache2k.extra.allTransition;
+package org.cache2k.extra.alltransition;
 
 /*
  * #%L
@@ -45,6 +45,9 @@ public class WarnAboutCache2kAllUsage implements CacheManagerLifeCycleListener {
   }
 
   @Override
+  /*
+  // method empty
+   */
   public void managerDestroyed(final CacheManager m) {
 
   }

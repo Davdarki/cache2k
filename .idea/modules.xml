@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/cache2k-all/cache2k-all.iml" filepath="$PROJECT_DIR$/cache2k-all/cache2k-all.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-api/cache2k-api.iml" filepath="$PROJECT_DIR$/cache2k-api/cache2k-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-base-bom/cache2k-base-bom.iml" filepath="$PROJECT_DIR$/cache2k-base-bom/cache2k-base-bom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-core/cache2k-core.iml" filepath="$PROJECT_DIR$/cache2k-core/cache2k-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-jcache/cache2k-jcache.iml" filepath="$PROJECT_DIR$/cache2k-jcache/cache2k-jcache.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-jcache-tests/cache2k-jcache-tests.iml" filepath="$PROJECT_DIR$/cache2k-jcache-tests/cache2k-jcache-tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-osgi-all/cache2k-osgi-all.iml" filepath="$PROJECT_DIR$/cache2k-osgi-all/cache2k-osgi-all.iml" />
       <module fileurl="file://$PROJECT_DIR$/cache2k-parent.iml" filepath="$PROJECT_DIR$/cache2k-parent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-schemas/cache2k-schemas.iml" filepath="$PROJECT_DIR$/cache2k-schemas/cache2k-schemas.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-spring/cache2k-spring.iml" filepath="$PROJECT_DIR$/cache2k-spring/cache2k-spring.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cache2k-testing/cache2k-testing.iml" filepath="$PROJECT_DIR$/cache2k-testing/cache2k-testing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/documentation/documentation.iml" filepath="$PROJECT_DIR$/documentation/documentation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test-init/test-init.iml" filepath="$PROJECT_DIR$/test-init/test-init.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test-osgi/test-osgi.iml" filepath="$PROJECT_DIR$/test-osgi/test-osgi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test-parent/test-parent.iml" filepath="$PROJECT_DIR$/test-parent/test-parent.iml" />
     </modules>
   </component>
 </project>

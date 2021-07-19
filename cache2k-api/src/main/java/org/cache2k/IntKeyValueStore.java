@@ -20,7 +20,7 @@ package org.cache2k;
  * #L%
  */
 
-import java.util.Map;
+
 
 /**
  * Specialized version of {@link KeyValueStore} for int keys.

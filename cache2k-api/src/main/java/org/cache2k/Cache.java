@@ -869,7 +869,7 @@ public interface Cache<K, V> extends KeyValueStore<K,V>, Closeable {
   /**
    * Request an alternative interface for this cache instance.
    */
-  <X> X requestInterface(Class<X> _type);
+  <X> X requestInterface(Class<X> type);
 
   /**
    * Returns a map interface for operating with this cache. Operations on the map

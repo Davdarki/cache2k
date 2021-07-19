@@ -6,6 +6,24 @@
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/cache2k-all/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-api/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-base-bom/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-core/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-jcache-tests/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-jcache/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-osgi-all/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-schemas/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-spring/pom.xml" />
+        <option value="$PROJECT_DIR$/cache2k-testing/pom.xml" />
+        <option value="$PROJECT_DIR$/documentation/pom.xml" />
+        <option value="$PROJECT_DIR$/test-init/pom.xml" />
+        <option value="$PROJECT_DIR$/test-osgi/pom.xml" />
+        <option value="$PROJECT_DIR$/test-parent/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="openjdk-15" project-jdk-type="JavaSDK" />
 </project>

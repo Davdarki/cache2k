@@ -116,7 +116,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    * @see Cache2kBuilder#valueType(Class)
    */
   public static <K,V> Cache2kConfiguration<K, V> of(Class<K> keyType, Class<V> valueType) {
-    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<K,V>();
+    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<>();
     c.setKeyType(keyType);
     c.setValueType(valueType);
     return c;
@@ -130,7 +130,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    * @see Cache2kBuilder#valueType(CacheType)
    */
   public static <K,V> Cache2kConfiguration<K, V> of(Class<K> keyType, CacheType<V> valueType) {
-    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<K,V>();
+    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<>();
     c.setKeyType(keyType);
     c.setValueType(valueType);
     return c;
@@ -144,7 +144,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    * @see Cache2kBuilder#valueType(Class)
    */
   public static <K,V> Cache2kConfiguration<K, V> of(CacheType<K> keyType, Class<V> valueType) {
-    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<K,V>();
+    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<>();
     c.setKeyType(keyType);
     c.setValueType(valueType);
     return c;
@@ -158,7 +158,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    * @see Cache2kBuilder#valueType(CacheType)
    */
   public static <K,V> Cache2kConfiguration<K, V> of(CacheType<K> keyType, CacheType<V> valueType) {
-    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<K,V>();
+    Cache2kConfiguration<K,V> c = new Cache2kConfiguration<>();
     c.setKeyType(keyType);
     c.setValueType(valueType);
     return c;
@@ -323,9 +323,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    * @see Cache2kBuilder#maxRetryInterval
    */
   public void setMaxRetryInterval(long millis) {
-    if (entryCapacity >= 0) {
-
-    }
+    if (entryCapacity >= 0)
     maxRetryInterval = millis;
   }
 
@@ -422,7 +420,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     getSections().addAll(c);
   }
 
-  public CustomizationSupplier<? extends FunctionalCacheLoader<K,V>> getLoader() {
+  public CustomizationSupplier< extends FunctionalCacheLoader<K,V>> getLoader() {
     return loader;
   }
 
@@ -514,7 +512,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    */
   public CustomizationCollection<CacheEntryOperationListener<K,V>> getListeners() {
     if (listeners == null) {
-      listeners = new DefaultCustomizationCollection<CacheEntryOperationListener<K, V>>();
+      listeners = new DefaultCustomizationCollection<CacheEntryOperationListener<>>();
     }
     return listeners;
   }
@@ -543,7 +541,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    */
   public CustomizationCollection<CacheEntryOperationListener<K,V>> getAsyncListeners() {
     if (asyncListeners == null) {
-      asyncListeners = new DefaultCustomizationCollection<CacheEntryOperationListener<K, V>>();
+      asyncListeners = new DefaultCustomizationCollection<CacheEntryOperationListener<>>();
     }
     return asyncListeners;
   }
@@ -573,7 +571,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    */
   public CustomizationCollection<CacheClosedListener> getCacheClosedListeners() {
     if (closedListeners == null) {
-      closedListeners = new DefaultCustomizationCollection<CacheClosedListener>();
+      closedListeners = new DefaultCustomizationCollection<>();
     }
     return closedListeners;
   }
@@ -642,7 +640,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     return loaderExecutor;
   }
 
-  @Deprecated
+  @deprecated
   public boolean isDisableLastModificationTime() {
     return false;
   }
@@ -650,7 +648,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
   /**
    * @see Cache2kBuilder#disableLastModificationTime
    */
-  @Deprecated
+  @deprecated
   public void setDisableLastModificationTime(final boolean v) { }
 
   public boolean isRecordRefreshedTime() {
@@ -715,14 +713,14 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     timeReference = v;
   }
 
-  public CustomizationSupplier<Weigher> getWeigher() {
+  public CustomizationSupplier<> getWeigher() {
     return weigher;
   }
 
   /**
    * @see Cache2kBuilder#weigher(Weigher)
    */
-  public void setWeigher(final CustomizationSupplier<Weigher> v) {
+  public void setWeigher(final CustomizationSupplier<> v) {
     if (entryCapacity >= 0) {
       throw new IllegalArgumentException("entryCapacity already set, specifying a weigher is illegal");
     }

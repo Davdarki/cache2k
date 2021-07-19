@@ -87,8 +87,8 @@ public class Cache2kBuilder<K, V> {
    * {@link #valueType}.
    */
   @SuppressWarnings("unchecked")
-  public static Cache2kBuilder forUnknownTypes() {
-    return new Cache2kBuilder(null, null);
+  public static Cache2kBuilder <> forUnknownTypes() {
+    return new Cache2kBuilder <> (null, null);
   }
 
   /**
@@ -98,15 +98,14 @@ public class Cache2kBuilder<K, V> {
    * @see #valueType(Class)
    */
   public static <K,T> Cache2kBuilder<K,T> of(Class<K> keyType, Class<T> valueType) {
-    return new Cache2kBuilder<K, T>(CacheTypeCapture.of(keyType), CacheTypeCapture.of(valueType));
+    return new Cache2kBuilder<>(CacheTypeCapture.of(keyType), CacheTypeCapture.of(valueType));
   }
 
   /**
    * Create a builder from the configuration.
    */
   public static <K,T> Cache2kBuilder<K, T> of(Cache2kConfiguration<K, T> c) {
-    Cache2kBuilder<K,T> cb = new Cache2kBuilder<K, T>(c);
-    return cb;
+    return new Cache2kBuilder<>(c);
   }
 
   private CacheType<K> keyType;
@@ -138,8 +137,8 @@ public class Cache2kBuilder<K, V> {
       throw new IllegalArgumentException(MSG_NO_TYPES);
     }
     Type[] types = ((ParameterizedType) t).getActualTypeArguments();
-    keyType = (CacheType<K>) CacheTypeCapture.of(types[0]).getBeanRepresentation();
-    valueType = (CacheType<V>) CacheTypeCapture.of(types[1]).getBeanRepresentation();
+    keyType =  CacheTypeCapture.of(types[0]).getBeanRepresentation();
+    valueType = CacheTypeCapture.of(types[1]).getBeanRepresentation();
     if (Object.class.equals(keyType.getType()) &&
       Object.class.equals(valueType.getType())) {
       throw new IllegalArgumentException(MSG_NO_TYPES);
@@ -427,7 +426,7 @@ public class Cache2kBuilder<K, V> {
   /** Wraps to factory but passes on nulls. */
   private static <T> CustomizationReferenceSupplier<T> wrapCustomizationInstance(T obj) {
     if (obj == null) { return null; }
-    return new CustomizationReferenceSupplier<T>(obj);
+    return new CustomizationReferenceSupplier<>(obj);
   }
 
   /**
@@ -738,7 +737,7 @@ public class Cache2kBuilder<K, V> {
    * Deprecated since version 1.2. Method has no effect and will be removed in future releases.
    * Time recording is disabled by default and needs to be enabled via {@link #recordRefreshedTime(boolean)}.
    */
-  @Deprecated
+  @deprecated
   public final Cache2kBuilder<K,V> disableLastModificationTime(boolean flag) {
     return this;
   }
@@ -785,7 +784,7 @@ public class Cache2kBuilder<K, V> {
    * @see #prefetchExecutor(Executor)
    */
   public final Cache2kBuilder<K,V> loaderExecutor(Executor v) {
-    config().setLoaderExecutor(new CustomizationReferenceSupplier<Executor>(v));
+    config().setLoaderExecutor(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
@@ -798,7 +797,7 @@ public class Cache2kBuilder<K, V> {
    * @see #loaderExecutor(Executor)
    */
   public final Cache2kBuilder<K,V> prefetchExecutor(Executor v) {
-    config().setPrefetchExecutor(new CustomizationReferenceSupplier<Executor>(v));
+    config().setPrefetchExecutor(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
@@ -808,7 +807,7 @@ public class Cache2kBuilder<K, V> {
    * executor is used that has unbounded thread capacity otherwise.
    */
   public final Cache2kBuilder<K,V> executor(Executor v) {
-    config().setExecutor(new CustomizationReferenceSupplier<Executor>(v));
+    config().setExecutor(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
@@ -819,7 +818,7 @@ public class Cache2kBuilder<K, V> {
    * @see #addAsyncListener(CacheEntryOperationListener)
    */
   public final Cache2kBuilder<K,V> asyncListenerExecutor(Executor v) {
-    config().setAsyncListenerExecutor(new CustomizationReferenceSupplier<Executor>(v));
+    config().setAsyncListenerExecutor(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
@@ -827,7 +826,7 @@ public class Cache2kBuilder<K, V> {
    * Clock to be used by the cache as time reference.
    */
   public final Cache2kBuilder<K, V> timeReference(TimeReference v) {
-    config().setTimeReference(new CustomizationReferenceSupplier<TimeReference>(v));
+    config().setTimeReference(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
@@ -836,7 +835,7 @@ public class Cache2kBuilder<K, V> {
    * to be specified as well. Using a weigher has a slightly performance impact on the update of existing entries.
    */
   public final Cache2kBuilder<K, V> weigher(Weigher<K,V> v) {
-    config().setWeigher(new CustomizationReferenceSupplier<Weigher>(v));
+    config().setWeigher(new CustomizationReferenceSupplier<>(v));
     return this;
   }
 
