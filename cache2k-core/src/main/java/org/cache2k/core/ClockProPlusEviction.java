@@ -194,7 +194,7 @@ public class ClockProPlusEviction extends AbstractEviction {
   }
 
   public long getSize() {
-    return hotSize + coldSize;
+    return (long)hotSize + (long)coldSize;
   }
 
   @Override
