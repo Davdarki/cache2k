@@ -383,6 +383,7 @@ class TimerThread extends Thread {
             }
             condition.await(executionTime - currentTime, TimeUnit.MILLISECONDS);
           } catch (InterruptedException ignore) {
+            Thread.currentThread().interrupt();
           }
         }
       } finally {
