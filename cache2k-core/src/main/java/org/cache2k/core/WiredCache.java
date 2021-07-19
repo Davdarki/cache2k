@@ -310,7 +310,7 @@ public class WiredCache<K, V> extends BaseCache<K, V>
             int v = _countDown.decrementAndGet();
             if (v == 0) {
               _listener.onCompleted();
-              return;
+
             }
           }
         }
