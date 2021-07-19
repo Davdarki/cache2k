@@ -392,7 +392,9 @@ public class Entry<K, V> extends CompactEntry<K, V>
     boolean _interrupt = false;
     do {
       try {
-        wait();
+        synchronized (this) {
+          wait();
+        }
       } catch (InterruptedException ignore) {
         Thread.currentThread().interrupt();
         _interrupt = true;
