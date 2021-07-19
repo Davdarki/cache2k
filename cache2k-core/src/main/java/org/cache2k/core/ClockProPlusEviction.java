@@ -246,7 +246,7 @@ public class ClockProPlusEviction extends AbstractEviction {
       hand = hand.next;
     }
     this.hotHits = hotHits;
-    long scanCount = initialMaxScan - maxScan;
+    long scanCount = (long)initialMaxScan - (long)maxScan;
     hotScanCnt += scanCount;
     handHot = hand;
     return coldCandidate;
