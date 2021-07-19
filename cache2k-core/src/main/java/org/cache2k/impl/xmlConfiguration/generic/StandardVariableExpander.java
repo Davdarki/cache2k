@@ -123,7 +123,7 @@ public class StandardVariableExpander implements VariableExpander {
         String v0 = p.getValue();
         try {
           String v = expand(v0);
-          if (v0 != v) {
+          if (!v0.equals(v)) {
             p.setValue(v);
           }
           p.setExpanded(true);
