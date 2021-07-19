@@ -56,7 +56,7 @@ class CompactEntry<K, V> {
    * Holds the associated entry value or an exception via the {@link ExceptionWrapper}
    */
   @SuppressWarnings("unchecked")
-  private volatile V valueOrException = (V) INITIAL_VALUE;
+  private V valueOrException = (V) INITIAL_VALUE;
 
   /**
    * Hash implementation: the calculated, modified hash code, retrieved from the key when the entry is
