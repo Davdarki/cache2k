@@ -47,8 +47,8 @@ public class Cache2kCoreProviderImpl implements Cache2kCoreProvider {
     SingleProviderResolver.resolve(CacheConfigurationProvider.class, DummyConfigurationProvider.class);
 
   private Object lock = new Object();
-  private volatile Map<ClassLoader, String> loader2defaultName = Collections.emptyMap();
-  private volatile Map<ClassLoader, Map<String, CacheManager>> loader2name2manager = Collections.emptyMap();
+  private Map<ClassLoader, String> loader2defaultName = Collections.emptyMap();
+  private Map<ClassLoader, Map<String, CacheManager>> loader2name2manager = Collections.emptyMap();
   private String version;
 
   {
