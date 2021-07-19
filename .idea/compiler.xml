@@ -23,7 +23,7 @@
       <module name="cache2k-all" target="1.6" />
       <module name="cache2k-api" target="1.6" />
       <module name="cache2k-base-bom" target="1.5" />
-      <module name="cache2k-core" target="1.6" />
+      <module name="cache2k-core" target="8" />
       <module name="cache2k-jcache" target="1.6" />
       <module name="cache2k-jcache-tests" target="1.7" />
       <module name="cache2k-osgi-all" target="1.6" />

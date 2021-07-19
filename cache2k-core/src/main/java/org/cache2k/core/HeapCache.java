@@ -119,7 +119,7 @@ public class HeapCache<K, V> extends BaseCache<K, V> {
    * Counts the number of key mutations. The count is not guarded and racy, but does not need
    * to be exact. We don't put it to the metrics, because we do not want to have this disabled.
    */
-  protected volatile long keyMutationCnt = 0;
+  protected AtomicInteger keyMutationCnt = new AtomicInteger(0);
 
   protected long clearedTime = 0;
   protected long startedTime;
@@ -1352,7 +1352,7 @@ public class HeapCache<K, V> extends BaseCache<K, V> {
   private void checkForHashCodeChange(Entry<K, V> e) {
     K key = extractKeyObj(e);
     if (extractIntKeyValue(key, modifiedHash(key.hashCode())) != e.hashCode) {
-      if (keyMutationCnt ==  0) {
+      if (keyMutationCnt.equals(0)) {
         getLog().warn("Key mismatch! Key hashcode changed! keyClass=" + e.getKey().getClass().getName());
         String s;
         try {
@@ -1364,7 +1364,7 @@ public class HeapCache<K, V> extends BaseCache<K, V> {
           getLog().warn("Key mismatch! key.toString() threw exception", t);
         }
       }
-      keyMutationCnt++;
+      keyMutationCnt.incrementAndGet();
     }
   }
 

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.cache2k.core.util.Util.formatMillis;
 
@@ -60,7 +61,7 @@ class CacheBaseInfo implements InternalCacheInfo {
    */
   private long clearedTime;
   private long newEntryCnt;
-  private long keyMutationCnt;
+  private AtomicInteger keyMutationCnt;
   private long removedCnt;
   private long clearRemovedCnt;
   private long clearCnt;
@@ -190,7 +191,7 @@ class CacheBaseInfo implements InternalCacheInfo {
   }
 
   @Override
-  public long getKeyMutationCount() { return keyMutationCnt; }
+  public long getKeyMutationCount() { return keyMutationCnt.get(); }
   @Override
   public long getTimerEventCount() { return metrics.getTimerEventCount(); }
   @Override
