@@ -362,9 +362,8 @@ class TimerThread extends Thread {
             while (queue.isEmpty() && newTasksMayBeScheduled) {
               condition.await();
             }
-            if (!newTasksMayBeScheduled) {
-              return;
-            }
+
+
             SimpleTimerTask task = queue.getMin();
             if (task.isCancelled()) {
               queue.removeMin();
