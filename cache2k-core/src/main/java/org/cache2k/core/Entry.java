@@ -347,7 +347,7 @@ public class Entry<K, V> extends CompactEntry<K, V>
   }
 
   public void processingDone() {
-    notifyAll();
+    
     setProcessingState(ProcessingState.DONE);
     resetEntryAction();
   }
