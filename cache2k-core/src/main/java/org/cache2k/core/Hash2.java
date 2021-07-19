@@ -25,6 +25,7 @@ import org.cache2k.core.concurrency.Job;
 import org.cache2k.core.concurrency.Locks;
 import org.cache2k.core.concurrency.OptimisticLock;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -50,7 +51,7 @@ public class Hash2<K,V> {
    * Counts clear and close operation on the hash.
    * Needed for the iterator to detect the need for an abort.
    */
-  private volatile int clearOrCloseCount = 0;
+  private AtomicInteger clearOrCloseCount = new AtomicInteger();
 
   /**
    * Maximum size of one segment, after we expand.
@@ -361,12 +362,12 @@ public class Hash2<K,V> {
     for (AtomicLong aSegmentSize : segmentSize) {
       aSegmentSize.set(0);
     }
-    clearOrCloseCount++;
+    clearOrCloseCount.incrementAndGet();
     initArray();
   }
 
   public int getClearOrCloseCount() {
-    return clearOrCloseCount;
+    return clearOrCloseCount.get();
   }
 
   /**
@@ -377,7 +378,7 @@ public class Hash2<K,V> {
    * the implicit null check and has no additional overhead.
    */
   public void close() {
-    clearOrCloseCount++;
+    clearOrCloseCount.incrementAndGet();
     entries = null;
   }
 
