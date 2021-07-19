@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Jens Wilke
  */
-public class CaseTest {
+public class Test {
 
   @org.junit.Test
   public void test() {

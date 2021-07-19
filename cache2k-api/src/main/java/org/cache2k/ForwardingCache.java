@@ -232,7 +232,7 @@ public abstract class ForwardingCache<K, V> implements Cache<K, V> {
 
   @Override
   public <X> X requestInterface(final Class<X> type) {
-    return delegate().requestInterface(_type);
+    return delegate().requestInterface(type);
   }
 
   @Override

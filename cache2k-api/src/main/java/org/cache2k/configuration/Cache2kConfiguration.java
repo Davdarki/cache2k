@@ -420,7 +420,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     getSections().addAll(c);
   }
 
-  public CustomizationSupplier< extends FunctionalCacheLoader<K,V>> getLoader() {
+  public CustomizationSupplier<? extends FunctionalCacheLoader<K, V>> getLoader() {
     return loader;
   }
 
@@ -512,7 +512,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    */
   public CustomizationCollection<CacheEntryOperationListener<K,V>> getListeners() {
     if (listeners == null) {
-      listeners = new DefaultCustomizationCollection<CacheEntryOperationListener<>>();
+      listeners = new DefaultCustomizationCollection<>();
     }
     return listeners;
   }
@@ -541,7 +541,7 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
    */
   public CustomizationCollection<CacheEntryOperationListener<K,V>> getAsyncListeners() {
     if (asyncListeners == null) {
-      asyncListeners = new DefaultCustomizationCollection<CacheEntryOperationListener<>>();
+      asyncListeners = new DefaultCustomizationCollection<>();
     }
     return asyncListeners;
   }
@@ -640,7 +640,10 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     return loaderExecutor;
   }
 
-  @deprecated
+/**
+    * @deprecated (when, why, refactoring advice...)
+    */
+  @Deprecated
   public boolean isDisableLastModificationTime() {
     return false;
   }
@@ -648,7 +651,10 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
   /**
    * @see Cache2kBuilder#disableLastModificationTime
    */
-  @deprecated
+  /**
+    * @deprecated (when, why, refactoring advice...)
+    */
+  @Deprecated
   public void setDisableLastModificationTime(final boolean v) { }
 
   public boolean isRecordRefreshedTime() {
@@ -713,14 +719,14 @@ public class Cache2kConfiguration<K, V> implements ConfigurationBean, Configurat
     timeReference = v;
   }
 
-  public CustomizationSupplier<> getWeigher() {
+  public CustomizationSupplier getWeigher() {
     return weigher;
   }
 
   /**
    * @see Cache2kBuilder#weigher(Weigher)
    */
-  public void setWeigher(final CustomizationSupplier<> v) {
+  public void setWeigher(final CustomizationSupplier v) {
     if (entryCapacity >= 0) {
       throw new IllegalArgumentException("entryCapacity already set, specifying a weigher is illegal");
     }

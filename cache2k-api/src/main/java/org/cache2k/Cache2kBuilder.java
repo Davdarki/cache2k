@@ -87,7 +87,7 @@ public class Cache2kBuilder<K, V> {
    * {@link #valueType}.
    */
   @SuppressWarnings("unchecked")
-  public static Cache2kBuilder <> forUnknownTypes() {
+  public static Cache2kBuilder forUnknownTypes() {
     return new Cache2kBuilder <> (null, null);
   }
 
@@ -737,7 +737,10 @@ public class Cache2kBuilder<K, V> {
    * Deprecated since version 1.2. Method has no effect and will be removed in future releases.
    * Time recording is disabled by default and needs to be enabled via {@link #recordRefreshedTime(boolean)}.
    */
-  @deprecated
+  /**
+    * @deprecated (when, why, refactoring advice...)
+    */
+  @Deprecated
   public final Cache2kBuilder<K,V> disableLastModificationTime(boolean flag) {
     return this;
   }
