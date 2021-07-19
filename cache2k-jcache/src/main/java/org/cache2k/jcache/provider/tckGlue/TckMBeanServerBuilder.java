@@ -51,7 +51,7 @@ public class TckMBeanServerBuilder extends MBeanServerBuilder {
     public WrapperMBeanServerDelegate() {
     }
 
-    public String getMBeanServerId() {
+    public synchronized String getMBeanServerId() {
       return "TckMBeanServer";
     }
 
