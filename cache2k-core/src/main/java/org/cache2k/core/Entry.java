@@ -394,6 +394,7 @@ public class Entry<K, V> extends CompactEntry<K, V>
       try {
         wait();
       } catch (InterruptedException ignore) {
+        Thread.currentThread().interrupt();
         _interrupt = true;
       }
     } while (isProcessing());
