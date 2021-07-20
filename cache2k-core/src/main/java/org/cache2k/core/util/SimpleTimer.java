@@ -362,7 +362,9 @@ class TimerThread extends Thread {
             while (queue.isEmpty() && newTasksMayBeScheduled) {
               condition.await();
             }
-
+            if (!newTasksMayBeScheduled) { 
+               return;     
+             }
 
             SimpleTimerTask task = queue.getMin();
             if (task.isCancelled()) {
@@ -382,7 +384,7 @@ class TimerThread extends Thread {
             }
             condition.await(executionTime - currentTime, TimeUnit.MILLISECONDS);
           } catch (InterruptedException ignore) {
-            Thread.currentThread().interrupt();
+          
           }
         }
       } finally {
