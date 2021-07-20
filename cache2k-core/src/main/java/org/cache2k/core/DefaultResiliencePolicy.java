@@ -109,8 +109,8 @@ public class DefaultResiliencePolicy<K,V> extends ResiliencePolicy<K,V> {
     }
     if (retryInterval == -1) {
       retryInterval = resilienceDuration * RETRY_PERCENT_OF_RESILIENCE_DURATION / 100;
-      retryInterval = Math.max(retryInterval, maxRetryInterval);
-      retryInterval = Math.min(MIN_RETRY_INTERVAL, retryInterval);
+      retryInterval = Math.min(retryInterval, maxRetryInterval);
+      retryInterval = Math.max(MIN_RETRY_INTERVAL, retryInterval);
     }
     if (retryInterval > maxRetryInterval) {
       maxRetryInterval = retryInterval;
